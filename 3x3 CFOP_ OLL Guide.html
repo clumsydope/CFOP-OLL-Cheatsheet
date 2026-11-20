@@ -3,9 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1a1a1a">
   <meta name="artifact-type" content="dashboard">
   <meta name="design-style" content="bauhaus">
   <title>3x3 CFOP OLL 57 Visual Cheat Sheet</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
@@ -84,7 +87,7 @@
         </div>
         <div class="controls-actions">
           <button type="button" class="btn" id="btn-triggers" aria-pressed="true" onclick="toggleTriggers()">Highlight Triggers: On</button>
-          <button type="button" class="btn btn--blue" id="btn-drill" onclick="toggleDrillPanel()">Recognition Drill</button>
+          <button type="button" class="btn btn--blue" id="btn-drill" aria-expanded="false" aria-controls="drill-panel" onclick="toggleDrillPanel()">Recognition Drill</button>
           <button type="button" class="btn" id="btn-reset" onclick="resetProgress(this)">Reset Progress</button>
         </div>
       </div>
@@ -434,10 +437,10 @@
       if (!bar) return;
       const buttons = [];
       const allActive = appState.activeCat === `all` ? ` is-active` : ``;
-      buttons.push(`<button type="button" class="cat-btn${allActive}" onclick="setCategory('all')">All Shapes <span class="cat-count">57</span></button>`);
+      buttons.push(`<button type="button" class="cat-btn${allActive}" aria-pressed="${appState.activeCat === `all`}" onclick="setCategory('all')">All Shapes <span class="cat-count">57</span></button>`);
       CATEGORIES.forEach(cat => {
         const cls = appState.activeCat === cat.id ? ` is-active` : ``;
-        buttons.push(`<button type="button" class="cat-btn${cls}" onclick="setCategory('${cat.id}')">${cat.name} <span class="cat-count">${cat.countLabel}</span></button>`);
+        buttons.push(`<button type="button" class="cat-btn${cls}" aria-pressed="${appState.activeCat === cat.id}" onclick="setCategory('${cat.id}')">${cat.name} <span class="cat-count">${cat.countLabel}</span></button>`);
       });
       bar.innerHTML = buttons.join(``);
     }
@@ -674,7 +677,7 @@
       const panel = document.getElementById(`drill-panel`);
       const btn = document.getElementById(`btn-drill`);
       if (panel) panel.classList.toggle(`is-open`, drillState.isOpen);
-      if (btn) btn.setAttribute(`aria-pressed`, drillState.isOpen ? `true` : `false`);
+      if (btn) btn.setAttribute(`aria-expanded`, drillState.isOpen ? `true` : `false`);
       if (drillState.isOpen) {
         nextDrillCase();
       }
@@ -766,6 +769,15 @@
     }
 
     initApp();
+  </script>
+  <script>
+    if (`serviceWorker` in navigator) {
+      window.addEventListener(`load`, () => {
+        navigator.serviceWorker.register(`./service-worker.js`).catch(error => {
+          console.error(`Service worker registration failed:`, error);
+        });
+      });
+    }
   </script>
 </body>
 </html>

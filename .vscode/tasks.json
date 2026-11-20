@@ -1,0 +1,54 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Extract HTML embedded CSS",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"-e",
+				"const fs=require('fs');const hp='c:\\\\Users\\\\HomePC\\\\Downloads\\\\Rubik CFOP\\\\3x3 CFOP_ OLL Guide.html';const cp='c:\\\\Users\\\\HomePC\\\\Downloads\\\\Rubik CFOP\\\\style.css';let h=fs.readFileSync(hp,'utf8');const m=h.match(/<style>([\\s\\S]*?)<\\\\/style>/);if(!m)throw new Error('No embedded style block found');fs.writeFileSync(cp,m[1].trim()+'\\n','utf8');h=h.replace(/<style>[\\s\\S]*?<\\\\/style>/,'');const needle='  <link href=\\\"https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap\\\" rel=\\\"stylesheet\\\">';if(!h.includes(needle))throw new Error('Stylesheet insertion point not found');h=h.replace(needle,needle+'\\n  <link rel=\\\"stylesheet\\\" href=\\\"style.css\\\">');fs.writeFileSync(hp,h,'utf8');console.log('Extracted CSS and linked style.css')"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run CSS extraction",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"extract-styles.js"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Extract embedded CSS",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"extract-styles.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Extract embedded CSS absolute",
+			"type": "shell",
+			"command": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"extract-styles.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}

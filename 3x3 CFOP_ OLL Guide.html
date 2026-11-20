@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="dashboard">
+  <meta name="design-style" content="bauhaus">
+  <title>3x3 CFOP OLL 57 Visual Cheat Sheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+  <main class="page-grid">
+    <header class="hero-block">
+      <div>
+        <span class="kicker">3x3 CFOP Method &middot; Orientation of the Last Layer</span>
+        <h1 class="title">All 57 <mark>OLL Cases</mark> Visual Cheat Sheet</h1>
+        <p class="lede">
+          Complete 2D top-layer pattern diagrams for every CFOP OLL case (OLL 1&ndash;57), organized into nine shape families with GANCUBE tutorial algorithms, trigger highlighting, AUF rotation previews, and persistent mastery tracking.
+        </p>
+      </div>
+      <aside class="legend-panel" aria-label="Diagram Legend">
+        <h2 class="legend-title">2D Diagram Key</h2>
+        <div class="legend-row">
+          <span class="swatch swatch--yellow" aria-hidden="true"></span>
+          <span><strong>Yellow tile</strong> &mdash; Top sticker already oriented on U</span>
+        </div>
+        <div class="legend-row">
+          <span class="swatch swatch--grey" aria-hidden="true"></span>
+          <span><strong>Grey tile</strong> &mdash; Unoriented top-layer sticker</span>
+        </div>
+        <div class="legend-row">
+          <span class="swatch swatch--bar" aria-hidden="true"></span>
+          <span><strong>Outer yellow bar</strong> &mdash; Side face sticker facing outward</span>
+        </div>
+        <div class="legend-row">
+          <span>Lowercase moves (<code>r, l, f</code>) are <strong>wide 2-layer turns</strong>; <code>M, S</code> are middle-slice turns.</span>
+        </div>
+      </aside>
+    </header>
+
+    <section class="kpi-strip" aria-label="Mastery Summary">
+      <div class="kpi-card kpi-card--highlight">
+        <span class="kpi-label">Total OLL Cases</span>
+        <span class="kpi-value" id="kpi-total">57</span>
+        <span class="kpi-caption">Across 9 shape categories</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Mastered</span>
+        <span class="kpi-value" id="kpi-mastered">0 / 57</span>
+        <div class="progress-track" aria-hidden="true">
+          <div class="progress-fill" id="mastery-bar"></div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">In Practice</span>
+        <span class="kpi-value" id="kpi-learning">0</span>
+        <span class="kpi-caption">Marked for active drilling</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Visible Results</span>
+        <span class="kpi-value" id="kpi-visible">57</span>
+        <span class="kpi-caption" id="kpi-filter-note">Showing all 9 shape groups</span>
+      </div>
+    </section>
+
+    <section class="controls-panel" aria-label="Filters and Study Tools">
+      <div class="controls-top-row">
+        <div class="field-group">
+          <label class="field-label" for="search-input">Search Case #, Name, or Algorithm</label>
+          <input class="text-input" id="search-input" type="search" placeholder="e.g. 27, Sune, Chameleon, R U R'..." oninput="handleFilterChange()">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="status-filter">Mastery Filter</label>
+          <select class="select-input" id="status-filter" onchange="handleFilterChange()">
+            <option value="all">All Statuses</option>
+            <option value="unseen">Unseen Only</option>
+            <option value="learning">Learning Only</option>
+            <option value="mastered">Mastered Only</option>
+          </select>
+        </div>
+        <div class="controls-actions">
+          <button type="button" class="btn" id="btn-triggers" aria-pressed="true" onclick="toggleTriggers()">Highlight Triggers: On</button>
+          <button type="button" class="btn btn--blue" id="btn-drill" onclick="toggleDrillPanel()">Recognition Drill</button>
+          <button type="button" class="btn" id="btn-reset" onclick="resetProgress(this)">Reset Progress</button>
+        </div>
+      </div>
+
+      <div class="category-bar" id="category-bar" role="group" aria-label="Shape Categories"></div>
+    </section>
+
+    <section class="drill-panel" id="drill-panel" aria-label="Interactive OLL Recognition Drill">
+      <div class="drill-diagram-wrap">
+        <svg class="oll-svg oll-svg--lg" id="drill-svg" viewBox="0 0 120 120" aria-label="Drill OLL Pattern"></svg>
+        <span class="auf-tag" id="drill-auf-tag">Angle: Standard</span>
+      </div>
+      <div class="drill-body">
+        <div>
+          <span class="kicker">Recognition Drill</span>
+          <h2 class="section-heading" id="drill-prompt">Identify this OLL case and recall its algorithm</h2>
+        </div>
+        <div class="drill-answer" id="drill-answer">
+          <div><strong id="drill-case-title">OLL 27 &mdash; Sune</strong></div>
+          <div class="alg-text" id="drill-case-alg">R U R' U R U2 R'</div>
+          <div class="prob-note" id="drill-case-meta"></div>
+        </div>
+        <div class="drill-actions">
+          <button type="button" class="btn btn--primary" id="btn-drill-reveal" onclick="revealDrillAnswer()">Reveal Answer</button>
+          <button type="button" class="btn" onclick="rotateDrillAngle()">Randomize Angle</button>
+          <button type="button" class="btn" onclick="markDrillStatus('learning')">Mark Learning</button>
+          <button type="button" class="btn btn--blue" onclick="markDrillStatus('mastered')">Mark Mastered &amp; Next</button>
+          <button type="button" class="btn" onclick="nextDrillCase()">Next Case</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="empty-state" id="empty-state" aria-live="polite">
+      <h2 class="section-heading">No matching OLL cases</h2>
+      <p>Your current search query, category tab, and mastery filter did not match any of the 57 OLL patterns.</p>
+      <button type="button" class="btn btn--primary" onclick="clearAllFilters()">Clear All Filters</button>
+    </section>
+
+    <div class="sections-stack" id="sections-container"></div>
+
+    <footer class="footer-note">
+      <span><strong>Sources:</strong> GANCUBE 3x3 CFOP Tutorial &amp; Standard 57-Case OLL Nomenclature (Cases 1&ndash;57).</span>
+      <span>2D patterns generated directly from inverse algorithm geometry so every outer bar matches the starting hold angle.</span>
+    </footer>
+  </main>
+
+  <api-shim></api-shim>
+  <script>
+    const CATEGORIES = [
+      { id: `cross`, name: `Cross (OCLL)`, desc: `All 4 top edges oriented (0 corners to 4 corners)`, accent: `section--yellow`, countLabel: `7` },
+      { id: `dot`, name: `Dot`, desc: `0 top edges oriented &mdash; center dot only`, accent: `section--red`, countLabel: `8` },
+      { id: `line`, name: `Line`, desc: `2 opposite edges oriented in a bar`, accent: `section--blue`, countLabel: `4` },
+      { id: `l-shape`, name: `L-Shape`, desc: `2 adjacent edges oriented at 90 degrees`, accent: `section--black`, countLabel: `6` },
+      { id: `t-c`, name: `T & C Shapes`, desc: `Symmetric 6-tile T and C block shapes`, accent: `section--blue`, countLabel: `4` },
+      { id: `p-w`, name: `P & W Shapes`, desc: `Asymmetric P-blocks and stepped W-shapes`, accent: `section--red`, countLabel: `6` },
+      { id: `fish`, name: `Fish`, desc: `Diagonal fish-tail and kite corner patterns`, accent: `section--yellow`, countLabel: `4` },
+      { id: `knight`, name: `Knight / Awkward`, desc: `L-knight jumps and awkward 5-sticker clusters`, accent: `section--black`, countLabel: `8` },
+      { id: `lightning`, name: `Lightning / I-Line`, desc: `Zig-zag lightning bolts, squares, and H/I patterns`, accent: `section--blue`, countLabel: `10` }
+    ];
+
+    const OLL_CASES = [
+      // 1. Cross (7)
+      { id: 21, cat: `cross`, name: `H (Cross)`, edges: `4 Edges`, alg: `F (R U R' U') (R U R' U') (R U R' U') F'`, note: `Triple Sexy Move framed by F / F'.` },
+      { id: 22, cat: `cross`, name: `Pi (Bruno)`, edges: `4 Edges`, alg: `R U2 (R2' U' R2 U' R2') U2 R`, note: `Symmetric Pi headlights with R2' U' cycles.` },
+      { id: 23, cat: `cross`, name: `Headlights (U)`, edges: `4 Edges`, alg: `R2 D (R' U2 R) D' (R' U2 R')`, note: `D-layer commutator; hold headlights in front.` },
+      { id: 24, cat: `cross`, name: `Chameleon (T)`, edges: `4 Edges`, alg: `(r U R' U') (r' F R F')`, note: `Wide Sexy into fat Sledgehammer.` },
+      { id: 25, cat: `cross`, name: `Bowtie (L)`, edges: `4 Edges`, alg: `F' (r U R' U') r' F R`, note: `Diagonal corners; fast 8-move trigger.` },
+      { id: 26, cat: `cross`, name: `Antisune`, edges: `4 Edges`, alg: `R U2 R' U' R U' R'`, note: `Core 7-move corner 3-twist (inverse Sune).` },
+      { id: 27, cat: `cross`, name: `Sune`, edges: `4 Edges`, alg: `R U R' U R U2 R'`, note: `Fundamental 7-move OCLL trigger.` },
+
+      // 2. Dot (8)
+      { id: 1, cat: `dot`, name: `Runway`, edges: `0 Edges`, alg: `(R U2) (R2' F R F') U2 (R' F R F')`, note: `Two Sledgehammers separated by U2.` },
+      { id: 2, cat: `dot`, name: `Zamboni`, edges: `0 Edges`, alg: `F (R U R' U') F' f (R U R' U') f'`, note: `F-Sexy-F' immediately followed by f-Sexy-f'.` },
+      { id: 3, cat: `dot`, name: `Anti-Mouse`, edges: `0 Edges`, alg: `f (R U R' U') f' U' F (R U R' U') F'`, note: `f-Sexy-f', U' pause, then F-Sexy-F'.` },
+      { id: 4, cat: `dot`, name: `Mouse`, edges: `0 Edges`, alg: `f (R U R' U') f' U F (R U R' U') F'`, note: `f-Sexy-f', U pause, then F-Sexy-F'.` },
+      { id: 17, cat: `dot`, name: `Slash (Diagonal)`, edges: `0 Edges`, alg: `(R U R' U) (R' F R F') U2 (R' F R F')`, note: `Set up into double Sledgehammer.` },
+      { id: 18, cat: `dot`, name: `Crown`, edges: `0 Edges`, alg: `R U2 (R2' F R F') U2 M' (U R U' r')`, note: `Headlights on front, ends with M-slice.` },
+      { id: 19, cat: `dot`, name: `Bunny`, edges: `0 Edges`, alg: `M U (R U R' U') M' (R' F R F')`, note: `M-slice setup into Sledgehammer.` },
+      { id: 20, cat: `dot`, name: `Checkers (X)`, edges: `0 Edges`, alg: `(r U R' U') M2 (U R U' R') U' M'`, note: `All 4 corners oriented; M2 flip.` },
+
+      // 3. Line (4)
+      { id: 51, cat: `line`, name: `Bottlecap`, edges: `2 Opp. Edges`, alg: `f (R U R' U') (R U R' U') f'`, note: `Double Sexy inside wide f / f'.` },
+      { id: 52, cat: `line`, name: `Rice Cooker`, edges: `2 Opp. Edges`, alg: `R' F' U' F U' R U R' U R`, note: `Rotationless right-hand line case.` },
+      { id: 55, cat: `line`, name: `Highway`, edges: `2 Opp. Edges`, alg: `R U2 R2 U' R U' R' U2 (F R F')`, note: `No corners solved; headlights on sides.` },
+      { id: 56, cat: `line`, name: `Streetlights`, edges: `2 Opp. Edges`, alg: `(r U r') (U R U' R') (U R U' R') (r U' r')`, note: `Symmetric double inverse-Sexy inside r / r'.` },
+
+      // 4. L-Shape (6)
+      { id: 47, cat: `l-shape`, name: `Anti-Breakneck`, edges: `2 Adj. Edges`, alg: `F' (L' U' L U) (L' U' L U) F`, note: `Left double Sexy inside F' / F.` },
+      { id: 48, cat: `l-shape`, name: `Breakneck`, edges: `2 Adj. Edges`, alg: `F (R U R' U') (R U R' U') F'`, note: `Right double Sexy inside F / F'.` },
+      { id: 49, cat: `l-shape`, name: `Right Back Squeezy`, edges: `2 Adj. Edges`, alg: `r U' r2 U r2 U r2 U' r`, note: `Fast r2 flow; bar on left side.` },
+      { id: 50, cat: `l-shape`, name: `Right Front Squeezy`, edges: `2 Adj. Edges`, alg: `r' U r2 U' r2 U' r2 U r'`, note: `Inverse r2 flow; bar on left side.` },
+      { id: 53, cat: `l-shape`, name: `Frying Pan`, edges: `2 Adj. Edges`, alg: `r' U' R U' R' U R U' R' U2 r`, note: `Double Antisune variation with wide r.` },
+      { id: 54, cat: `l-shape`, name: `Anti-Frying Pan`, edges: `2 Adj. Edges`, alg: `r U R' U R U' R' U R U2 r'`, note: `Double Sune variation with wide r.` },
+
+      // 5. T & C Shapes (4)
+      { id: 33, cat: `t-c`, name: `T-Shape (Key)`, edges: `2 Opp. Edges`, alg: `(R U R' U') (R' F R F')`, note: `Sexy Move + Sledgehammer — fastest 8-mover.` },
+      { id: 34, cat: `t-c`, name: `City`, edges: `2 Opp. Edges`, alg: `(R U R2' U') (R' F R U) R U' F'`, note: `C-shape with headlights on right.` },
+      { id: 45, cat: `t-c`, name: `Suit Up (T)`, edges: `2 Opp. Edges`, alg: `F (R U R' U') F'`, note: `Classic 6-move FRURUF.` },
+      { id: 46, cat: `t-c`, name: `Seein' Headlights (C)`, edges: `2 Opp. Edges`, alg: `R' U' (R' F R F') U R`, note: `Setup into Sledgehammer, undo setup.` },
+
+      // 6. P & W Shapes (6)
+      { id: 31, cat: `p-w`, name: `Couch (P)`, edges: `2 Adj. Edges`, alg: `(R' U' F) (U R U' R') F' R`, note: `P-block on right with side bar.` },
+      { id: 32, cat: `p-w`, name: `Anti-Couch (P)`, edges: `2 Adj. Edges`, alg: `S (R U R' U') (R' F R f')`, note: `S-slice Sexy + Sledge with wide f'.` },
+      { id: 36, cat: `p-w`, name: `Wario (W)`, edges: `2 Adj. Edges`, alg: `(L' U' L U') (L' U L U) (L F' L' F)`, note: `Left-handed W-staircase.` },
+      { id: 38, cat: `p-w`, name: `Mario (W)`, edges: `2 Adj. Edges`, alg: `(R U R' U) (R U' R' U') (R' F R F')`, note: `Right-handed W-staircase into Sledge.` },
+      { id: 43, cat: `p-w`, name: `Anti-P`, edges: `2 Adj. Edges`, alg: `R' U' F' U F R`, note: `Compact 6-move inverse P-shape.` },
+      { id: 44, cat: `p-w`, name: `P-Shape`, edges: `2 Adj. Edges`, alg: `f (R U R' U') f'`, note: `Wide f Sexy f' — 6-move staple.` },
+
+      // 7. Fish (4)
+      { id: 9, cat: `fish`, name: `Kite`, edges: `2 Adj. Edges`, alg: `(R U R' U') R' F (R2 U R' U') F'`, note: `Sexy + R' F R2 U R' U' F'.` },
+      { id: 10, cat: `fish`, name: `Anti-Kite`, edges: `2 Adj. Edges`, alg: `(R U R' U) (R' F R F') (R U2 R')`, note: `Sune-start into Sledgehammer + R U2 R'.` },
+      { id: 35, cat: `fish`, name: `Fish Salad`, edges: `2 Adj. Edges`, alg: `(R U2) (R2' F R F') (R U2 R')`, note: `Symmetric R U2 around Sledgehammer.` },
+      { id: 37, cat: `fish`, name: `Mounted Fish`, edges: `2 Adj. Edges`, alg: `F R' F' R U R U' R'`, note: `Hedgeslammer + inverse Sexy (8 moves).` },
+
+      // 8. Knight / Awkward (8)
+      { id: 13, cat: `knight`, name: `Gun`, edges: `2 Opp. Edges`, alg: `F U R U' R2 F' R U R U' R'`, note: `Knight shape; F U R U' R2 F' R start.` },
+      { id: 14, cat: `knight`, name: `Anti-Gun`, edges: `2 Opp. Edges`, alg: `R' F R U R' F' R F U' F'`, note: `Left-pointing knight shape.` },
+      { id: 15, cat: `knight`, name: `Squeegee`, edges: `2 Opp. Edges`, alg: `(l' U' l) (L' U' L U) (l' U l)`, note: `Left wide trigger around L' U' L U.` },
+      { id: 16, cat: `knight`, name: `Anti-Squeegee`, edges: `2 Opp. Edges`, alg: `(r U r') (R U R' U') (r U' r')`, note: `Right wide trigger around Sexy Move.` },
+      { id: 29, cat: `knight`, name: `Spotted Chameleon`, edges: `2 Adj. Edges`, alg: `(R U R' U') (R U' R') (F' U' F) (R U R')`, note: `Awkward shape with front-right bar.` },
+      { id: 30, cat: `knight`, name: `Anti-Spotted Chameleon`, edges: `2 Adj. Edges`, alg: `F (R' F R2 U' R' U') (R U R' F2)`, note: `Awkward shape mirror of OLL 29.` },
+      { id: 41, cat: `knight`, name: `Awkward Fish`, edges: `2 Adj. Edges`, alg: `(R U R' U) (R U2 R') F (R U R' U') F'`, note: `Sune followed immediately by FRURUF.` },
+      { id: 42, cat: `knight`, name: `Lefty Awkward Fish`, edges: `2 Adj. Edges`, alg: `(R' U' R U') (R' U2 R) F (R U R' U') F'`, note: `Back-Sune followed by FRURUF.` },
+
+      // 9. Lightning / I-Line (10)
+      { id: 5, cat: `lightning`, name: `Left Square`, edges: `2 Adj. Edges`, alg: `r' U2 R U R' U r`, note: `Fat Antisune — 2x2 yellow block.` },
+      { id: 6, cat: `lightning`, name: `Right Square`, edges: `2 Adj. Edges`, alg: `r U2 R' U' R U' r'`, note: `Fat Sune — 2x2 yellow block.` },
+      { id: 7, cat: `lightning`, name: `Wide Sune`, edges: `2 Adj. Edges`, alg: `r U R' U R U2 r'`, note: `Small lightning bolt (7 moves).` },
+      { id: 8, cat: `lightning`, name: `Left Wide Sune`, edges: `2 Adj. Edges`, alg: `r' U' R U' R' U2 r`, note: `Mirror small lightning bolt (7 moves).` },
+      { id: 11, cat: `lightning`, name: `Downstairs`, edges: `2 Adj. Edges`, alg: `r' (R2 U R' U R U2 R') U M'`, note: `Big lightning bolt; ends with U M'.` },
+      { id: 12, cat: `lightning`, name: `Upstairs`, edges: `2 Adj. Edges`, alg: `M' (R' U' R U' R' U2 R) U' M`, note: `Big lightning bolt; M' setup.` },
+      { id: 28, cat: `lightning`, name: `Stealth (Arrow)`, edges: `2 Adj. Edges`, alg: `(r U R' U') M (U R U' R')`, note: `All 4 corners oriented; 2 adj. edges flipped.` },
+      { id: 39, cat: `lightning`, name: `Fung`, edges: `2 Opp. Edges`, alg: `L F' (L' U' L U) F U' L'`, note: `Big lightning (opposite edges).` },
+      { id: 40, cat: `lightning`, name: `Anti-Fung`, edges: `2 Opp. Edges`, alg: `R' F (R U R' U') F' U R`, note: `Mirror big lightning (opposite edges).` },
+      { id: 57, cat: `lightning`, name: `H-Shape (Mummy)`, edges: `2 Opp. Edges`, alg: `(R U R' U') M' (U R U' r')`, note: `All 4 corners oriented; 2 opp. edges flipped.` }
+    ];
+
+    // Exact 54-sticker 3x3 simulator to compute top-layer OLL pattern & 12 outer bars
+    // Face indices: U:0..8, D:9..17, F:18..26, B:27..35, L:36..44, R:45..53
+    // Each face is row-major looking directly at that face (0:TL,1:T,2:TR,3:L,4:C,5:R,6:BL,7:B,8:BR)
+    function makeSolvedCube() {
+      const c = new Array(54).fill(0);
+      for (let i = 0; i < 9; i++) c[i] = 1; // U stickers = 1 (yellow), others = 0
+      return c;
+    }
+
+    function rotFaceCW(c, off) {
+      const t = c.slice(off, off + 9);
+      c[off + 0] = t[6]; c[off + 1] = t[3]; c[off + 2] = t[0];
+      c[off + 3] = t[7]; c[off + 4] = t[4]; c[off + 5] = t[1];
+      c[off + 6] = t[8]; c[off + 7] = t[5]; c[off + 8] = t[2];
+    }
+
+    function cycle4(c, a, b, d, e) {
+      for (let i = 0; i < 3; i++) {
+        const tmp = c[e[i]];
+        c[e[i]] = c[d[i]];
+        c[d[i]] = c[b[i]];
+        c[b[i]] = c[a[i]];
+        c[a[i]] = tmp;
+      }
+    }
+
+    function moveBase(c, m) {
+      const U = 0, D = 9, F = 18, B = 27, L = 36, R = 45;
+      if (m === `U`) {
+        rotFaceCW(c, U);
+        cycle4(c, [F+0,F+1,F+2], [L+0,L+1,L+2], [B+0,B+1,B+2], [R+0,R+1,R+2]);
+      } else if (m === `D`) {
+        rotFaceCW(c, D);
+        cycle4(c, [F+6,F+7,F+8], [R+6,R+7,R+8], [B+6,B+7,B+8], [L+6,L+7,L+8]);
+      } else if (m === `R`) {
+        rotFaceCW(c, R);
+        cycle4(c, [F+2,F+5,F+8], [U+2,U+5,U+8], [B+6,B+3,B+0], [D+2,D+5,D+8]);
+      } else if (m === `L`) {
+        rotFaceCW(c, L);
+        cycle4(c, [U+0,U+3,U+6], [F+0,F+3,F+6], [D+0,D+3,D+6], [B+8,B+5,B+2]);
+      } else if (m === `F`) {
+        rotFaceCW(c, F);
+        cycle4(c, [U+6,U+7,U+8], [R+0,R+3,R+6], [D+2,D+1,D+0], [L+8,L+5,L+2]);
+      } else if (m === `B`) {
+        rotFaceCW(c, B);
+        cycle4(c, [U+2,U+1,U+0], [L+0,L+3,L+6], [D+6,D+7,D+8], [R+8,R+5,R+2]);
+      } else if (m === `M`) {
+        // Follows L
+        cycle4(c, [U+1,U+4,U+7], [F+1,F+4,F+7], [D+1,D+4,D+7], [B+7,B+4,B+1]);
+      } else if (m === `S`) {
+        // Follows F
+        cycle4(c, [U+3,U+4,U+5], [R+1,R+4,R+7], [D+5,D+4,D+3], [L+7,L+4,L+1]);
+      } else if (m === `E`) {
+        // Follows D
+        cycle4(c, [F+3,F+4,F+5], [R+3,R+4,R+5], [B+3,B+4,B+5], [L+3,L+4,L+5]);
+      } else if (m === `r`) {
+        moveBase(c, `R`); moveBase(c, `M`); moveBase(c, `M`); moveBase(c, `M`);
+      } else if (m === `l`) {
+        moveBase(c, `L`); moveBase(c, `M`);
+      } else if (m === `f`) {
+        moveBase(c, `F`); moveBase(c, `S`);
+      } else if (m === `u`) {
+        moveBase(c, `U`); moveBase(c, `E`); moveBase(c, `E`); moveBase(c, `E`);
+      }
+    }
+
+    function parseMoves(algStr) {
+      const cleaned = algStr.replace(/[()]/g, ` `).trim();
+      const tokens = cleaned.split(/\s+/).filter(Boolean);
+      return tokens.map(tok => {
+        const face = tok[0];
+        const mod = tok.slice(1);
+        let turns = 1;
+        if (mod.indexOf(`2`) !== -1) turns = 2;
+        else if (mod.indexOf(`'`) !== -1) turns = 3;
+        return { face, turns };
+      });
+    }
+
+    function computeOllPattern(algStr) {
+      const c = makeSolvedCube();
+      const moves = parseMoves(algStr);
+      // Apply inverse of algorithm
+      for (let i = moves.length - 1; i >= 0; i--) {
+        const invTurns = (4 - moves[i].turns) % 4;
+        for (let t = 0; t < invTurns; t++) moveBase(c, moves[i].face);
+      }
+      // Return U face (3x3) and side bars [top, right, bottom, left]
+      // Top bar (B top row looking down: B2, B1, B0)
+      // Right bar (R top row back-to-front: R2, R1, R0)
+      // Bottom bar (F top row left-to-right: F0, F1, F2)
+      // Left bar (L top row back-to-front: L0, L1, L2)
+      return {
+        grid: c.slice(0, 9),
+        top: [c[29], c[28], c[27]],
+        right: [c[47], c[46], c[45]],
+        bottom: [c[18], c[19], c[20]],
+        left: [c[36], c[37], c[38]]
+      };
+    }
+
+    function rotatePatternCW(pat, steps) {
+      let cur = {
+        grid: pat.grid.slice(),
+        top: pat.top.slice(),
+        right: pat.right.slice(),
+        bottom: pat.bottom.slice(),
+        left: pat.left.slice()
+      };
+      for (let s = 0; s < steps; s++) {
+        const g = cur.grid;
+        cur = {
+          grid: [g[6], g[3], g[0], g[7], g[4], g[1], g[8], g[5], g[2]],
+          top: cur.left.slice().reverse(),
+          right: cur.top.slice(),
+          bottom: cur.right.slice().reverse(),
+          left: cur.bottom.slice()
+        };
+      }
+      return cur;
+    }
+
+    // Precompute patterns for all 57 cases
+    const PATTERN_MAP = {};
+    OLL_CASES.forEach(item => {
+      PATTERN_MAP[item.id] = computeOllPattern(item.alg);
+    });
+
+    // App State
+    let appState = {
+      statusMap: {},     // { [id]: 'learning' | 'mastered' }
+      rotations: {},     // { [id]: 0 | 1 | 2 | 3 }
+      activeCat: `all`,
+      showTriggers: true
+    };
+
+    let drillState = {
+      isOpen: false,
+      currentId: 27,
+      angle: 0,
+      revealed: false
+    };
+
+    function buildOllSvgMarkup(pat) {
+      const parts = [];
+      // 3x3 inner grid: cells at x=18,46,74; y=18,46,74; size=28x28
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+          const val = pat.grid[r * 3 + c];
+          const x = 18 + c * 28;
+          const y = 18 + r * 28;
+          const fill = val === 1 ? `var(--cube-yellow)` : `var(--cube-grey)`;
+          parts.push(`<rect x="${x}" y="${y}" width="28" height="28" fill="${fill}" stroke="var(--outline)" stroke-width="2.5"/>`);
+        }
+      }
+      // Top bars (3)
+      for (let i = 0; i < 3; i++) {
+        const x = 19 + i * 28;
+        const fill = pat.top[i] === 1 ? `var(--cube-yellow)` : `var(--cube-bar-off)`;
+        parts.push(`<rect x="${x}" y="6" width="26" height="8" fill="${fill}" stroke="var(--outline)" stroke-width="1.75"/>`);
+      }
+      // Bottom bars (3)
+      for (let i = 0; i < 3; i++) {
+        const x = 19 + i * 28;
+        const fill = pat.bottom[i] === 1 ? `var(--cube-yellow)` : `var(--cube-bar-off)`;
+        parts.push(`<rect x="${x}" y="106" width="26" height="8" fill="${fill}" stroke="var(--outline)" stroke-width="1.75"/>`);
+      }
+      // Left bars (3)
+      for (let i = 0; i < 3; i++) {
+        const y = 19 + i * 28;
+        const fill = pat.left[i] === 1 ? `var(--cube-yellow)` : `var(--cube-bar-off)`;
+        parts.push(`<rect x="6" y="${y}" width="8" height="26" fill="${fill}" stroke="var(--outline)" stroke-width="1.75"/>`);
+      }
+      // Right bars (3)
+      for (let i = 0; i < 3; i++) {
+        const y = 19 + i * 28;
+        const fill = pat.right[i] === 1 ? `var(--cube-yellow)` : `var(--cube-bar-off)`;
+        parts.push(`<rect x="106" y="${y}" width="8" height="26" fill="${fill}" stroke="var(--outline)" stroke-width="1.75"/>`);
+      }
+      return parts.join(``);
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, `&amp;`).replace(/</g, `&lt;`).replace(/>/g, `&gt;`);
+    }
+
+    function formatAlgorithm(alg) {
+      let safe = escapeHtml(alg);
+      if (!appState.showTriggers) return safe;
+      // Highlight Sexy Move and Sledgehammer triggers
+      safe = safe.replace(/\(R U R' U'\)/g, `<span class="trig-sexy">(R U R' U')</span>`);
+      safe = safe.replace(/\(L' U' L U\)/g, `<span class="trig-sexy">(L' U' L U)</span>`);
+      safe = safe.replace(/\(R' F R F'\)/g, `<span class="trig-sledge">(R' F R F')</span>`);
+      safe = safe.replace(/\(F R' F' R\)/g, `<span class="trig-sledge">(F R' F' R)</span>`);
+      return safe;
+    }
+
+    async function persistState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+        await window.notebookAppApi.setAppState({
+          statusMap: appState.statusMap,
+          activeCat: appState.activeCat,
+          showTriggers: appState.showTriggers
+        });
+      }
+    }
+
+    function renderCategoryBar() {
+      const bar = document.getElementById(`category-bar`);
+      if (!bar) return;
+      const buttons = [];
+      const allActive = appState.activeCat === `all` ? ` is-active` : ``;
+      buttons.push(`<button type="button" class="cat-btn${allActive}" onclick="setCategory('all')">All Shapes <span class="cat-count">57</span></button>`);
+      CATEGORIES.forEach(cat => {
+        const cls = appState.activeCat === cat.id ? ` is-active` : ``;
+        buttons.push(`<button type="button" class="cat-btn${cls}" onclick="setCategory('${cat.id}')">${cat.name} <span class="cat-count">${cat.countLabel}</span></button>`);
+      });
+      bar.innerHTML = buttons.join(``);
+    }
+
+    function getFilteredCases() {
+      const searchEl = document.getElementById(`search-input`);
+      const statusEl = document.getElementById(`status-filter`);
+      const query = searchEl ? searchEl.value.trim().toLowerCase() : ``;
+      const statusFilter = statusEl ? statusEl.value : `all`;
+
+      return OLL_CASES.filter(item => {
+        if (appState.activeCat !== `all` && item.cat !== appState.activeCat) return false;
+        const st = appState.statusMap[item.id] || `unseen`;
+        if (statusFilter !== `all` && st !== statusFilter) return false;
+        if (query) {
+          const hay = `oll ${item.id} ${item.name} ${item.alg} ${item.note}`.toLowerCase();
+          if (hay.indexOf(query) === -1) return false;
+        }
+        return true;
+      });
+    }
+
+    function updateKpis(visibleCount) {
+      let mastered = 0;
+      let learning = 0;
+      OLL_CASES.forEach(c => {
+        const st = appState.statusMap[c.id];
+        if (st === `mastered`) mastered++;
+        else if (st === `learning`) learning++;
+      });
+
+      const masteredEl = document.getElementById(`kpi-mastered`);
+      const learningEl = document.getElementById(`kpi-learning`);
+      const visibleEl = document.getElementById(`kpi-visible`);
+      const noteEl = document.getElementById(`kpi-filter-note`);
+      const barEl = document.getElementById(`mastery-bar`);
+
+      if (masteredEl) masteredEl.textContent = `${mastered} / 57`;
+      if (learningEl) learningEl.textContent = `${learning}`;
+      if (visibleEl) visibleEl.textContent = `${visibleCount}`;
+      if (barEl) barEl.style.width = `${Math.round((mastered / 57) * 100)}%`;
+
+      if (noteEl) {
+        if (appState.activeCat === `all`) {
+          noteEl.textContent = `Showing across all 9 shape groups`;
+        } else {
+          const found = CATEGORIES.find(c => c.id === appState.activeCat);
+          noteEl.textContent = found ? `Filtered to ${found.name}` : `Filtered view`;
+        }
+      }
+    }
+
+    function getAufLabel(rot) {
+      if (rot === 1) return `Pre-AUF: U'`;
+      if (rot === 2) return `Pre-AUF: U2`;
+      if (rot === 3) return `Pre-AUF: U`;
+      return `Standard Hold`;
+    }
+
+    function renderGrid() {
+      const container = document.getElementById(`sections-container`);
+      const emptyEl = document.getElementById(`empty-state`);
+      if (!container) return;
+
+      const filtered = getFilteredCases();
+      updateKpis(filtered.length);
+
+      if (filtered.length === 0) {
+        container.innerHTML = ``;
+        if (emptyEl) emptyEl.classList.add(`is-visible`);
+        return;
+      }
+      if (emptyEl) emptyEl.classList.remove(`is-visible`);
+
+      const sectionHtml = [];
+      CATEGORIES.forEach((cat, idx) => {
+        const items = filtered.filter(c => c.cat === cat.id);
+        if (items.length === 0) return;
+
+        const cardsHtml = items.map(item => {
+          const status = appState.statusMap[item.id] || `unseen`;
+          const statusLabel = status === `mastered` ? `Mastered` : (status === `learning` ? `Learning` : `Unseen`);
+          const cardCls = status === `mastered` ? `oll-card is-mastered` : `oll-card`;
+          const rot = appState.rotations[item.id] || 0;
+          const pat = rotatePatternCW(PATTERN_MAP[item.id], rot);
+          const svgInner = buildOllSvgMarkup(pat);
+          const aufText = getAufLabel(rot);
+
+          return `
+            <article class="${cardCls}" id="card-${item.id}">
+              <div class="card-head">
+                <div class="card-id-group">
+                  <span class="case-num">OLL ${item.id}</span>
+                  <h3 class="case-name">${escapeHtml(item.name)}</h3>
+                </div>
+                <button type="button" class="status-btn" data-status="${status}" onclick="cycleCaseStatus(${item.id})" aria-label="Change mastery status for OLL ${item.id}">
+                  ${statusLabel}
+                </button>
+              </div>
+              <div class="card-visual-row">
+                <div class="diagram-box">
+                  <svg class="oll-svg" viewBox="0 0 120 120" role="img" aria-label="Top-layer 2D diagram for OLL ${item.id} ${escapeHtml(item.name)}">
+                    ${svgInner}
+                  </svg>
+                  <span class="auf-tag">${aufText}</span>
+                </div>
+                <div class="card-info">
+                  <span class="edge-badge">${escapeHtml(item.edges)}</span>
+                  <span class="prob-note">${escapeHtml(item.note)}</span>
+                  <div class="card-mini-actions">
+                    <button type="button" class="btn btn--sm" onclick="rotateCard(${item.id})">Rotate 90&deg;</button>
+                    <button type="button" class="btn btn--sm" onclick="copyAlg(${item.id}, this)">Copy Alg</button>
+                  </div>
+                </div>
+              </div>
+              <div class="alg-box">
+                <div class="alg-label">
+                  <span>CFOP Algorithm</span>
+                </div>
+                <div class="alg-text">${formatAlgorithm(item.alg)}</div>
+              </div>
+            </article>
+          `;
+        }).join(``);
+
+        sectionHtml.push(`
+          <section class="category-section ${cat.accent}" aria-labelledby="sec-head-${cat.id}">
+            <div class="section-header">
+              <div class="section-title-wrap">
+                <span class="section-kicker">Group 0${idx + 1}</span>
+                <h2 class="section-heading" id="sec-head-${cat.id}">${cat.name}</h2>
+              </div>
+              <span class="section-meta">${cat.desc} &middot; ${items.length} shown</span>
+            </div>
+            <div class="oll-grid">
+              ${cardsHtml}
+            </div>
+          </section>
+        `);
+      });
+
+      container.innerHTML = sectionHtml.join(``);
+    }
+
+    function setCategory(catId) {
+      appState.activeCat = catId;
+      renderCategoryBar();
+      renderGrid();
+      persistState();
+    }
+
+    function handleFilterChange() {
+      renderGrid();
+    }
+
+    function clearAllFilters() {
+      const searchEl = document.getElementById(`search-input`);
+      const statusEl = document.getElementById(`status-filter`);
+      if (searchEl) searchEl.value = ``;
+      if (statusEl) statusEl.value = `all`;
+      appState.activeCat = `all`;
+      renderCategoryBar();
+      renderGrid();
+      persistState();
+    }
+
+    function toggleTriggers() {
+      appState.showTriggers = !appState.showTriggers;
+      const btn = document.getElementById(`btn-triggers`);
+      if (btn) {
+        btn.setAttribute(`aria-pressed`, appState.showTriggers ? `true` : `false`);
+        btn.textContent = appState.showTriggers ? `Highlight Triggers: On` : `Highlight Triggers: Off`;
+      }
+      renderGrid();
+      renderDrill();
+      persistState();
+    }
+
+    function cycleCaseStatus(id) {
+      const cur = appState.statusMap[id] || `unseen`;
+      if (cur === `unseen`) appState.statusMap[id] = `learning`;
+      else if (cur === `learning`) appState.statusMap[id] = `mastered`;
+      else delete appState.statusMap[id];
+      renderGrid();
+      persistState();
+    }
+
+    function rotateCard(id) {
+      const cur = appState.rotations[id] || 0;
+      appState.rotations[id] = (cur + 1) % 4;
+      renderGrid();
+    }
+
+    function copyAlg(id, btn) {
+      const item = OLL_CASES.find(c => c.id === id);
+      if (!item) return;
+      const cleanAlg = item.alg.replace(/[()]/g, ``);
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === `function`) {
+        navigator.clipboard.writeText(cleanAlg).catch(() => {});
+      }
+      if (btn) {
+        const orig = btn.textContent;
+        btn.textContent = `Copied`;
+        setTimeout(() => {
+          btn.textContent = orig;
+        }, 1200);
+      }
+    }
+
+    function resetProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `Click Again to Confirm`;
+        setTimeout(() => {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.textContent = `Reset Progress`;
+          }
+        }, 3500);
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `Reset Progress`;
+      appState.statusMap = {};
+      appState.rotations = {};
+      renderGrid();
+      persistState();
+    }
+
+    // Recognition Drill functions
+    function toggleDrillPanel() {
+      drillState.isOpen = !drillState.isOpen;
+      const panel = document.getElementById(`drill-panel`);
+      const btn = document.getElementById(`btn-drill`);
+      if (panel) panel.classList.toggle(`is-open`, drillState.isOpen);
+      if (btn) btn.setAttribute(`aria-pressed`, drillState.isOpen ? `true` : `false`);
+      if (drillState.isOpen) {
+        nextDrillCase();
+      }
+    }
+
+    function renderDrill() {
+      if (!drillState.isOpen) return;
+      const item = OLL_CASES.find(c => c.id === drillState.currentId) || OLL_CASES[0];
+      const svgEl = document.getElementById(`drill-svg`);
+      const aufEl = document.getElementById(`drill-auf-tag`);
+      const ansEl = document.getElementById(`drill-answer`);
+      const titleEl = document.getElementById(`drill-case-title`);
+      const algEl = document.getElementById(`drill-case-alg`);
+      const metaEl = document.getElementById(`drill-case-meta`);
+      const revBtn = document.getElementById(`btn-drill-reveal`);
+
+      const pat = rotatePatternCW(PATTERN_MAP[item.id], drillState.angle);
+      if (svgEl) svgEl.innerHTML = buildOllSvgMarkup(pat);
+      if (aufEl) aufEl.textContent = getAufLabel(drillState.angle);
+      if (titleEl) titleEl.textContent = `OLL ${item.id} \u2014 ${item.name}`;
+      if (algEl) algEl.innerHTML = formatAlgorithm(item.alg);
+      if (metaEl) metaEl.textContent = `${item.edges} \u00B7 ${item.note}`;
+      if (ansEl) ansEl.classList.toggle(`is-revealed`, drillState.revealed);
+      if (revBtn) revBtn.textContent = drillState.revealed ? `Hide Answer` : `Reveal Answer`;
+    }
+
+    function nextDrillCase() {
+      const pool = getFilteredCases();
+      const sourcePool = pool.length > 0 ? pool : OLL_CASES;
+      // Prefer unmastered cases if available
+      const unmastered = sourcePool.filter(c => appState.statusMap[c.id] !== `mastered`);
+      const activePool = unmastered.length > 0 ? unmastered : sourcePool;
+      const pick = activePool[Math.floor(Math.random() * activePool.length)];
+      drillState.currentId = pick.id;
+      drillState.angle = Math.floor(Math.random() * 4);
+      drillState.revealed = false;
+      renderDrill();
+    }
+
+    function revealDrillAnswer() {
+      drillState.revealed = !drillState.revealed;
+      renderDrill();
+    }
+
+    function rotateDrillAngle() {
+      drillState.angle = (drillState.angle + 1) % 4;
+      renderDrill();
+    }
+
+    function markDrillStatus(status) {
+      appState.statusMap[drillState.currentId] = status;
+      renderGrid();
+      persistState();
+      nextDrillCase();
+    }
+
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            if (saved.statusMap && typeof saved.statusMap === `object`) {
+              appState.statusMap = saved.statusMap;
+            }
+            if (typeof saved.activeCat === `string`) {
+              appState.activeCat = saved.activeCat;
+            }
+            if (typeof saved.showTriggers === `boolean`) {
+              appState.showTriggers = saved.showTriggers;
+            }
+          }
+        } catch (e) {
+          // Ignore storage read errors and use defaults
+        }
+      }
+
+      const trigBtn = document.getElementById(`btn-triggers`);
+      if (trigBtn) {
+        trigBtn.setAttribute(`aria-pressed`, appState.showTriggers ? `true` : `false`);
+        trigBtn.textContent = appState.showTriggers ? `Highlight Triggers: On` : `Highlight Triggers: Off`;
+      }
+
+      renderCategoryBar();
+      renderGrid();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    initApp();
+  </script>
+</body>
+</html>

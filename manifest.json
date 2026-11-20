@@ -1,0 +1,31 @@
+{
+  "id": "./3x3%20CFOP_%20OLL%20Guide.html",
+  "name": "3x3 CFOP OLL Visual Cheat Sheet",
+  "short_name": "OLL Cheat Sheet",
+  "description": "Interactive visual guide to all 57 CFOP OLL cases.",
+  "start_url": "./3x3%20CFOP_%20OLL%20Guide.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f0e8",
+  "theme_color": "#1a1a1a",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

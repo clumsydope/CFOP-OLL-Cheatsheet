@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1a1a1a">
+  <title>3x3 CFOP F2L Guide</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="tab-panel" id="f2l-panel" role="tabpanel" aria-label="F2L">
+    <main class="page-grid">
+      <header class="hero-block">
+        <div>
+          <span class="kicker">3x3 CFOP Method &middot; First Two Layers</span>
+          <h1 class="title">F2L <mark>Slot Guide</mark></h1>
+          <p class="lede">Solve a corner-and-edge pair while keeping the completed first layer intact. Match the pair to a common position, use the U layer to set it up, and insert it directly.</p>
+        </div>
+        <aside class="legend-panel" aria-label="F2L key">
+          <h2 class="legend-title">F2L Key</h2>
+          <div class="legend-row"><span><strong>Slot</strong> &mdash; one corner-edge pair between two centers</span></div>
+          <div class="legend-row"><span><strong>Pair</strong> &mdash; solved together, not one piece at a time</span></div>
+          <div class="legend-row"><span><strong>Lookahead</strong> &mdash; inspect the next slot while turning</span></div>
+        </aside>
+      </header>
+
+      <section class="pll-grid" aria-label="F2L technique groups">
+        <article class="kpi-card">
+          <span class="kpi-label">1. Paired above the slot</span>
+          <strong>R U R'</strong>
+          <p>The pair is already together. Turn U to align it over the matching slot, then insert with the standard right-sided pair.</p>
+        </article>
+        <article class="kpi-card">
+          <span class="kpi-label">2. Split pair, edge up</span>
+          <strong>U R U' R'</strong>
+          <p>Bring the edge over the slot, combine it with the corner, and separate or insert the pair using R moves.</p>
+        </article>
+        <article class="kpi-card">
+          <span class="kpi-label">3. Corner up, edge in slot</span>
+          <strong>U' R U R'</strong>
+          <p>Match the corner to its slot color, use U moves to set up the edge, then insert with a short R trigger.</p>
+        </article>
+        <article class="kpi-card">
+          <span class="kpi-label">4. Corner in bottom layer</span>
+          <strong>R U R' U'</strong>
+          <p>Align the corner beneath the target slot. Turn U to expose the edge, join the pieces, and finish with R U R'.</p>
+        </article>
+        <article class="kpi-card">
+          <span class="kpi-label">5. Pair in opposite slot</span>
+          <strong>U2 R U R' U R U2 R'</strong>
+          <p>Use U2 as a setup turn, solve the visible right-hand pair, and reverse the setup to restore the face.</p>
+        </article>
+        <article class="kpi-card">
+          <span class="kpi-label">6. Left-hand mirror</span>
+          <strong>L' U' L</strong>
+          <p>Mirror every right-side pattern: use L and L' for the same corner-edge pair on the left side.</p>
+        </article>
+      </section>
+
+      <section class="controls-panel" aria-label="F2L study steps">
+        <div class="controls-top-row">
+          <div>
+            <span class="kicker">Study Method</span>
+            <h2 class="section-heading">Solve all four slots naturally</h2>
+          </div>
+        </div>
+        <div class="category-bar">
+          <span class="category-chip is-active">1. Cross</span>
+          <span class="category-chip">2. White pair</span>
+          <span class="category-chip">3. Next slot</span>
+          <span class="category-chip">4. Maintain flow</span>
+        </div>
+      </section>
+
+      <footer class="footer-note">
+        <span><strong>Goal:</strong> complete the four first-layer slots before OLL.</span>
+        <span>Recognize the pair instead of memorizing every starting position.</span>
+      </footer>
+    </main>
+  </div>
+
+  <nav class="bottom-tabs" role="tablist" aria-label="CFOP guide sections">
+    <a class="bottom-tab is-active" href="F2L.html" role="tab" aria-selected="true" aria-current="page">
+      <span class="bottom-tab__label">F2L</span>
+      <span class="bottom-tab__caption">First 2 layers</span>
+    </a>
+    <a class="bottom-tab" href="3x3%20CFOP_%20OLL%20Guide.html" role="tab" aria-selected="false">
+      <span class="bottom-tab__label">OLL</span>
+      <span class="bottom-tab__caption">57 cases</span>
+    </a>
+    <a class="bottom-tab" href="PLL.html" role="tab" aria-selected="false">
+      <span class="bottom-tab__label">PLL</span>
+      <span class="bottom-tab__caption">21 cases</span>
+    </a>
+    <div class="bottom-tab bottom-tab--dropdown" role="tab" aria-selected="false">
+      <button class="bottom-tab__button" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="bottom-tab__label">Beginner CFOP</span>
+        <span class="bottom-tab__caption">Simplified learning</span>
+      </button>
+      <div class="bottom-dropdown-menu" role="menu" aria-label="Beginner CFOP methods">
+        <a href="2-Look-OLL.html" role="menuitem">2 Look OLL</a>
+        <a href="2-Look-PLL.html" role="menuitem">2 Look PLL</a>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    if (`serviceWorker` in navigator) {
+      window.addEventListener(`load`, () => {
+        navigator.serviceWorker.register(`./service-worker.js`).catch(error => {
+          console.error(`Service worker registration failed:`, error);
+        });
+      });
+    }
+  </script>
+  <script src="bottom-tabs.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1a1a1a">
+  <title>3x3 CFOP PLL Cheat Sheet</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="tab-panel" id="pll-panel" role="tabpanel" aria-label="PLL">
+    <main class="page-grid">
+      <header class="hero-block">
+        <div>
+          <span class="kicker">3x3 CFOP Method &middot; Permutation of the Last Layer</span>
+          <h1 class="title">21 <mark>PLL Cases</mark> Cheat Sheet</h1>
+          <p class="lede">Algorithms for permuting the last-layer corners and edges after OLL is complete.</p>
+        </div>
+        <aside class="legend-panel" aria-label="PLL notation">
+          <h2 class="legend-title">Notation</h2>
+          <div class="legend-row"><span><strong>U / R / L / F / B</strong> &mdash; face turns</span></div>
+          <div class="legend-row"><span><strong>Prime (&prime;)</strong> &mdash; counter-clockwise turn</span></div>
+          <div class="legend-row"><span><strong>2</strong> &mdash; 180-degree turn</span></div>
+        </aside>
+      </header>
+
+      <section class="pll-grid" aria-label="PLL algorithms">
+        <article class="kpi-card"><span class="kpi-label">Ua / Ub</span><strong>Ua: M2 U M U2 M' U M2</strong><strong>Ub: M2 U' M U2 M' U' M2</strong></article>
+        <article class="kpi-card"><span class="kpi-label">H</span><strong>M2 U M2 U2 M2 U M2</strong></article>
+        <article class="kpi-card"><span class="kpi-label">Z</span><strong>M2 U M2 U M' U2 M2 U2 M' U2</strong></article>
+        <article class="kpi-card"><span class="kpi-label">Aa / Ab</span><strong>Aa: x' L2 D2 L' U2 L D2 L' U2 x</strong><strong>Ab: x L2 D2 L U2 L' D2 L U2 x'</strong></article>
+        <article class="kpi-card"><span class="kpi-label">E</span><strong>x' (R U' R' D) (R U R' D') (R U R' D) (R U' R' D') x</strong></article>
+        <article class="kpi-card"><span class="kpi-label">F</span><strong>R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R</strong></article>
+        <article class="kpi-card"><span class="kpi-label">Ga / Gb / Gc / Gd</span><strong>Ga: R2 U R' U R' U' R U' R2 D U' R' U R D'</strong><strong>Gb: R' U' R U D' R2 U R' U R U' R U' R2 D</strong><strong>Gc: R2 U' R U' R U R' U R2 D' U R U' R' D</strong><strong>Gd: R U R' U' D R2 U' R U' R' U R' U R2 D'</strong></article>
+        <article class="kpi-card"><span class="kpi-label">Ja / Jb</span><strong>Ja: x R2 F R F' R U2 r' U r U2 x'</strong><strong>Jb: R U R' F' R U R' U' R' F R2 U' R' U'</strong></article>
+        <article class="kpi-card"><span class="kpi-label">Ra / Rb</span><strong>Ra: R U' R' U' R U R D R' U' R D' R' U2 R'</strong><strong>Rb: R2 F R U R U' R' F' R U2 R' U2 R</strong></article>
+        <article class="kpi-card"><span class="kpi-label">Na / Nb</span><strong>Na: z (U R' D) (R2 U' R' D) (U R' D) (R2 U' R' D)</strong><strong>Nb: z (D' R U') (R2 D R U') (D' R U') (R2 D R U')</strong></article>
+        <article class="kpi-card"><span class="kpi-label">Ta</span><strong>R U R' U' R' F R2 U' R' U' R U R' F'</strong></article>
+        <article class="kpi-card"><span class="kpi-label">V</span><strong>R' U R' U' y R' F' R2 U' R' U R' F R F</strong></article>
+        <article class="kpi-card"><span class="kpi-label">Y</span><strong>F R U' R' U' R U R' F' R U R' U' R' F R F'</strong></article>
+      </section>
+
+      <footer class="footer-note">
+        <span><strong>CFOP:</strong> Permutation of the Last Layer (PLL).</span>
+        <span>Use AUF (a final U turn) only when the edge-cycle algorithm is otherwise recognized correctly.</span>
+      </footer>
+    </main>
+  </div>
+
+  <nav class="bottom-tabs" role="tablist" aria-label="CFOP guide sections">
+    <a class="bottom-tab" href="F2L.html" role="tab" aria-selected="false">
+      <span class="bottom-tab__label">F2L</span>
+      <span class="bottom-tab__caption">First 2 layers</span>
+    </a>
+    <a class="bottom-tab" href="3x3%20CFOP_%20OLL%20Guide.html" role="tab" aria-selected="false">
+      <span class="bottom-tab__label">OLL</span>
+      <span class="bottom-tab__caption">57 cases</span>
+    </a>
+    <a class="bottom-tab is-active" href="PLL.html" role="tab" aria-selected="true" aria-current="page">
+      <span class="bottom-tab__label">PLL</span>
+      <span class="bottom-tab__caption">21 cases</span>
+    </a>
+    <div class="bottom-tab bottom-tab--dropdown" role="tab" aria-selected="false">
+      <button class="bottom-tab__button" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="bottom-tab__label">Beginner CFOP</span>
+        <span class="bottom-tab__caption">Simplified learning</span>
+      </button>
+      <div class="bottom-dropdown-menu" role="menu" aria-label="Beginner CFOP methods">
+        <a href="2-Look-OLL.html" role="menuitem">2 Look OLL</a>
+        <a href="2-Look-PLL.html" role="menuitem">2 Look PLL</a>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    if (`serviceWorker` in navigator) {
+      window.addEventListener(`load`, () => {
+        navigator.serviceWorker.register(`./service-worker.js`).catch(error => {
+          console.error(`Service worker registration failed:`, error);
+        });
+      });
+    }
+  </script>
+  <script src="bottom-tabs.js"></script>
+</body>
+</html>
